@@ -1,4 +1,7 @@
 """Classes for melon orders."""
+from random import choice
+from datetime import datetime
+#we will be using datetime.weekday() and datetime.time() for get_base_price()
 
 
 class AbstractMelonOrder(object):
@@ -11,10 +14,18 @@ class AbstractMelonOrder(object):
         self.qty = qty
         self.shipped = False
 
+    def get_base_price(self):
+        """need to find rush hour"""
+        random_base_price = choice(range(5, 10))
+        if (datetime.now().hour in range(8, 11) and
+                datetime.now().weekday() in range(5)):
+            random_base_price += 4
+        return random_base_price
+
     def get_total(self):
         """Calculate price, including tax."""
+        base_price = self.get_base_price()  # I want THIS INSTANCES method!(.self)
 
-        base_price = 5
         if self.species.lower() == "christmas melon":
             base_price = base_price * 1.5
         total = (1 + self.tax) * self.qty * base_price
